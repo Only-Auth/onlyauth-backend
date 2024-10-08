@@ -1,28 +1,23 @@
-FROM tiangolo/uvicorn-gunicorn-fastapi:python3.10
+# Use the official Node.js image as the base image
+FROM node:20-alpine
 
-WORKDIR /app/
+# Set the working directory
+WORKDIR /usr/src/app
 
-# Install Poetry
-RUN curl -sSL https://install.python-poetry.org | POETRY_HOME=/opt/poetry python && \
-    cd /usr/local/bin && \
-    ln -s /opt/poetry/bin/poetry && \
-    poetry config virtualenvs.create false
+# Copy package.json and package-lock.json
+COPY package*.json ./
 
-# Copy poetry.lock* in case it doesn't exist in the repo
-COPY ./pyproject.toml ./poetry.lock* /app/
+# Install dependencies
+RUN npm install
 
-# Allow installing dev dependencies to run tests
-ARG INSTALL_DEV=false
-RUN bash -c "if [ $INSTALL_DEV == 'true' ] ; then poetry install --no-root ; else poetry install --no-root --only main ; fi"
+# Copy the rest of the application code
+COPY . .
+RUN npx prisma generate
 
-ENV PYTHONPATH=/app
+# Expose the port from environment variable, default to 3000
+ARG PORT=3000
+ENV PORT $PORT
+EXPOSE $PORT
 
-COPY ./scripts/ /app/
-
-COPY ./alembic.ini /app/
-
-COPY ./prestart.sh /app/
-
-COPY ./tests-start.sh /app/
-
-COPY ./app /app/app
+# Command to run the application
+CMD ["npm", "start"]
