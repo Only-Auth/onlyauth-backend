@@ -17,7 +17,10 @@ if (process.env.NODE_ENV === 'development') {
 }
 
 app.use(cors({
-  origin: '*',
+  origin: [
+    /^http:\/\/localhost:\d+$/,
+    '*'
+  ],
   methods: 'GET,POST,PUT,DELETE',
 }))
 
