@@ -91,7 +91,7 @@ export default class DashbaordController {
         logo: Joi.string(),
         message: Joi.string(),
       }),
-      status: Joi.string().valid(...Object.values(APP_STATE)).default(APP_STATE.ACTIVE)
+      state: Joi.string().valid(...Object.values(APP_STATE)).default(APP_STATE.ACTIVE)
     })
 
     const { error, value } = schema.validate(req.body)
