@@ -10,6 +10,9 @@ export default class OperationsService {
       where: {
         clientId,
       },
+      include: {
+        consentScreen: true
+      }
     })
   }
 

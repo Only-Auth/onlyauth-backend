@@ -94,4 +94,37 @@ export default class OperationsController {
 
     return res.json({ accessToken })
   }
+
+  async getApplicationDetails(req,res){
+    const searchParams = req.query
+    const schema = Joi.object({
+      clientId: Joi.string().required(),
+    })
+
+    const { error, value } = schema.validate(searchParams)
+
+    if (error) {
+      return res
+        .status(400)
+        .json({ error: error.message, code: codes.SCHEMA_ERROR })
+    }
+
+    const { clientId } = value
+    const app = await this.service.findApplicationByClientId(clientId)
+
+    return res.json({
+      id: app.id,
+      name: app.name,
+      consentScreen: {
+        id: app.consentScreen.id,
+        name: app.consentScreen.name,
+        logo: app.consentScreen.logo,
+        title: app.consentScreen.title,
+        description: app.consentScreen.description,
+        developerEmail: app.consentScreen.developerEmail,
+        appAddress: app.consentScreen.appAddress,
+        message: app.consentScreen.message,
+      },
+    })
+  }
 }

@@ -1,4 +1,5 @@
 import Joi from 'joi'
+import { APP_STATE } from '@prisma/client/wasm'
 
 import DashboardService from './service.js'
 import codes from '../../common/constants/codes.js'
@@ -90,6 +91,7 @@ export default class DashbaordController {
         logo: Joi.string(),
         message: Joi.string(),
       }),
+      status: Joi.string().valid(...Object.values(APP_STATE)).default(APP_STATE.ACTIVE)
     })
 
     const { error, value } = schema.validate(req.body)

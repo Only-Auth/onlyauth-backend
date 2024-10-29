@@ -7,7 +7,8 @@ const controller = new OperationsController()
 const userMidlleware = new UserMiddleware()
 const router = Router();
 
-router.post('/grant',userMidlleware.attachUser.bind(userMidlleware), controller.grantAccess.bind(controller))
-router.post('/token',controller.getAccessToken.bind(controller))
+router.post('/grant', userMidlleware.attachUser.bind(userMidlleware), controller.grantAccess.bind(controller))
+router.post('/token', controller.getAccessToken.bind(controller))
+router.get('/application', controller.getApplicationDetails.bind(controller))
 
 export default router
