@@ -112,6 +112,12 @@ export default class OperationsController {
     const { clientId } = value
     const app = await this.service.findApplicationByClientId(clientId)
 
+    if (!app) {
+      return res
+        .status(400)
+        .json({ error: 'Client Id is invalid', code: codes.INVALID_CLIENT })
+    }
+
     return res.json({
       id: app.id,
       name: app.name,
