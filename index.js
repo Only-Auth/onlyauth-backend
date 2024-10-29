@@ -16,7 +16,10 @@ if (process.env.NODE_ENV === 'development') {
   app.use(morgan('dev'))
 }
 
-app.use(cors())
+app.use(cors({
+  origin: '*',
+  methods: 'GET,POST,PUT,DELETE',
+}))
 
 app.use(e.json())
 
